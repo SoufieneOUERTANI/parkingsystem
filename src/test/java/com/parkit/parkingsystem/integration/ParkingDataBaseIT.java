@@ -86,7 +86,9 @@ public class ParkingDataBaseIT {
         if(rs.next()){
         	assertNotEquals(rs.getTimestamp(4),null);
         	assertEquals(rs.getInt(7),1);
-           	assertNotEquals(rs.getFloat(3),0);
+        	if ((rs.getTimestamp(5).getTime() - rs.getTimestamp(4).getTime()) > 1800000){
+            	assertNotEquals(rs.getTimestamp(3),0);
+        	}        
         }
     }
 
