@@ -73,9 +73,10 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingLotExit() throws ClassNotFoundException, SQLException{
-        testParkingACar();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicle();
+        ParkingService parkingService_1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService_1.processIncomingVehicle();
+        ParkingService parkingService_2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService_2.processExitingVehicle();
         //TODO: check that the fare generated and out time are populated correctly in the database
         
         Connection con = null;
@@ -83,8 +84,9 @@ public class ParkingDataBaseIT {
         PreparedStatement ps = con.prepareStatement("select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE, p.AVAILABLE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=\"ABCDEF\" order by t.IN_TIME  limit 1");
         ResultSet rs = ps.executeQuery();
         if(rs.next()){
-        	assertEquals(rs.getInt(1),1);
-        	assertEquals(rs.getInt(7),0);
+        	assertNotEquals(rs.getTimestamp(4),null);
+        	assertEquals(rs.getInt(7),1);
+           	assertNotEquals(rs.getFloat(3),0);
         }
     }
 
