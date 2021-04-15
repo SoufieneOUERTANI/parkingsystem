@@ -15,6 +15,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
@@ -48,18 +55,37 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingACar(){
+    public void testParkingACar() throws ClassNotFoundException, SQLException{
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+    
+        Connection con = null;
+        con = ticketDAO.dataBaseConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement("select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE, p.AVAILABLE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=\"ABCDEF\" order by t.IN_TIME  limit 1");
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+        	assertEquals(rs.getInt(1),1);
+        	assertEquals(rs.getInt(7),0);
+        }
+        
     }
 
     @Test
-    public void testParkingLotExit(){
+    public void testParkingLotExit() throws ClassNotFoundException, SQLException{
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         //TODO: check that the fare generated and out time are populated correctly in the database
+        
+        Connection con = null;
+        con = ticketDAO.dataBaseConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement("select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE, p.AVAILABLE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=\"ABCDEF\" order by t.IN_TIME  limit 1");
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+        	assertEquals(rs.getInt(1),1);
+        	assertEquals(rs.getInt(7),0);
+        }
     }
 
 }
