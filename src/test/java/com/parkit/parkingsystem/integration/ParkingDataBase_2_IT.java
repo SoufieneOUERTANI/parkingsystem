@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.AfterAll;
@@ -14,7 +15,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,6 +72,8 @@ public class ParkingDataBase_2_IT {
         PreparedStatement ps;
         int qr;
         
+        assertEquals(ticketDAO.verifyRecuring("ABCDEF"),false);
+        
         ps = con.prepareStatement("insert into ticket(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?,?)");
         ps.setInt(1, 1);
         ps.setInt(2, 1);
@@ -86,6 +93,7 @@ public class ParkingDataBase_2_IT {
         qr = ps.executeUpdate();
         
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        assertEquals(ticketDAO.verifyRecuring("ABCDEF"),true);
         parkingService.processExitingVehicle();
 
         
@@ -99,5 +107,6 @@ public class ParkingDataBase_2_IT {
         	assertEquals(
         			(Math.round(rs.getFloat(3) * 100))/100.0, (Math.round(prix * 100))/100.0);
         }
-     }      
+
+    }
 }

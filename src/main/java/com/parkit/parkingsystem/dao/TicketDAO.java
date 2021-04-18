@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
+import static com.parkit.parkingsystem.constants.DBConstants.GET_EXITING_TICKET;
+
 public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
@@ -85,5 +87,27 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+    public boolean verifyRecuring(String vehicleRegNumber) {
+        Connection con = null;
+        boolean verifyRecuring = false;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(GET_EXITING_TICKET);
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            ps.setString(1,vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                verifyRecuring = true;
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return verifyRecuring;
+        }
     }
 }
