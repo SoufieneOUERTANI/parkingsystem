@@ -5,21 +5,16 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
-import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,7 +64,6 @@ public class ParkingDataBase_2_IT {
         Connection con = null;
         con = ticketDAO.dataBaseConfig.getConnection();
         PreparedStatement ps;
-        int qr;
         
         assertEquals(ticketDAO.verifyRecuring("ABCDEF"),false);
         
@@ -81,7 +74,7 @@ public class ParkingDataBase_2_IT {
         ps.setInt(4, 0);
         ps.setTimestamp(5,Timestamp.from(Instant.now().minus(4,ChronoUnit.HOURS)));
         ps.setTimestamp(6,Timestamp.from(Instant.now().minus(2,ChronoUnit.HOURS)));
-        qr = ps.executeUpdate();
+        ps.executeUpdate();
         
         ps = con.prepareStatement("insert into ticket(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?,?)");
         ps.setInt(1, 2);
@@ -90,7 +83,7 @@ public class ParkingDataBase_2_IT {
         ps.setInt(4, 0);
         ps.setTimestamp(5,Timestamp.from(Instant.now().minus(1,ChronoUnit.HOURS)));
         ps.setTimestamp(6,null);
-        qr = ps.executeUpdate();
+        ps.executeUpdate();
         
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         assertEquals(ticketDAO.verifyRecuring("ABCDEF"),true);
