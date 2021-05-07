@@ -10,11 +10,14 @@ public class FareCalculatorService {
 	
     private static TicketDAO ticketDAO = new TicketDAO();
 
-    public void calculateFare(Ticket ticket) throws ClassNotFoundException, SQLException{
+    public static void setTicketDAO(TicketDAO ticketDAO) {
+		FareCalculatorService.ticketDAO = ticketDAO;
+	}
 
-       
+	public void calculateFare(Ticket ticket) throws ClassNotFoundException, SQLException{
+
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+            throw new IllegalArgumentException("Out time and In time provided are incorrect: // InTime : "+ticket.getInTime().toString()+" // OutTime : "+ticket.getOutTime().toString());
         }
 
         long inHour = ticket.getInTime().getTime();
