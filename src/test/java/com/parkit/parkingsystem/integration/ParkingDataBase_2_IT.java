@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * @author SOUE
+ *
+ */
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBase_2_IT {
 
@@ -60,33 +64,37 @@ public class ParkingDataBase_2_IT {
         //dataBasePrepareService.clearDataBaseEntries();
     }
     
+    /**
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     @Test
     
     public void testRecuringUser5PercentDiscount() throws ClassNotFoundException, SQLException{
         Connection con = null;
-        con = ticketDAO.dataBaseConfig.getConnection();
         PreparedStatement ps;
-        
+
+        con = ticketDAO.dataBaseConfig.getConnection();
         assertEquals(ticketDAO.verifyRecuring("ABCDEF"),false);
         
-        ps = con.prepareStatement("insert into ticket(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?,?)");
-        ps.setInt(1, 1);
-        ps.setInt(2, 1);
-        ps.setString(3, "ABCDEF");
-        ps.setInt(4, 0);
-        ps.setTimestamp(5,Timestamp.from(Instant.now().minus(4,ChronoUnit.HOURS)));
-        ps.setTimestamp(6,Timestamp.from(Instant.now().minus(2,ChronoUnit.HOURS)));
-        ps.executeUpdate();
+        int id = 1;
+        int parking_number = 1; 
+        String vehicle_reg_number = "ABCDEF"; 
+        int price = 0;
+        int in_time_min = 240;
+        int out_time_min = 120;
+
+        insertDBTicketField(con, id, parking_number, vehicle_reg_number, price, in_time_min, out_time_min);
         
-        ps = con.prepareStatement("insert into ticket(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?,?)");
-        ps.setInt(1, 2);
-        ps.setInt(2, 2);
-        ps.setString(3, "ABCDEF");
-        ps.setInt(4, 0);
-        ps.setTimestamp(5,Timestamp.from(Instant.now().minus(1,ChronoUnit.HOURS)));
-        ps.setTimestamp(6,null);
-        ps.executeUpdate();
+        id = 2;
+        parking_number = 2; 
+        vehicle_reg_number = "ABCDEF"; 
+        price = 0;
+        in_time_min = 60;
+        out_time_min = 0;
         
+        insertDBTicketField(con, id, parking_number, vehicle_reg_number, price, in_time_min, out_time_min);
+     
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         assertEquals(ticketDAO.verifyRecuring("ABCDEF"),true);
         parkingService.processExitingVehicle();
@@ -104,4 +112,30 @@ public class ParkingDataBase_2_IT {
         }
 
     }
+
+	/**
+	 * @param con
+	 * @param id
+	 * @param parking_number
+	 * @param vehicle_reg_number
+	 * @param price
+	 * @param in_time_min
+	 * @param out_time_min
+	 * @throws SQLException
+	 */
+	private void insertDBTicketField(Connection con, int id, int parking_number, String vehicle_reg_number, int price,
+			int in_time_min, int out_time_min) throws SQLException {
+		PreparedStatement ps;
+		ps = con.prepareStatement("insert into ticket(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?,?)");
+        ps.setInt(1, id);
+        ps.setInt(2, parking_number );
+        ps.setString(3, vehicle_reg_number);
+        ps.setInt(4, price);
+        ps.setTimestamp(5,Timestamp.from(Instant.now().minus(in_time_min,ChronoUnit.MINUTES)));
+        ps.setTimestamp(6,Timestamp.from(Instant.now().minus(out_time_min,ChronoUnit.MINUTES)));
+        if (out_time_min == 0) {
+            ps.setTimestamp(6,null);
+        }
+        ps.executeUpdate();
+	}
 }
