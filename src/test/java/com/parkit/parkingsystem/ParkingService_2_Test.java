@@ -38,7 +38,7 @@ public class ParkingService_2_Test {
     }
 
     @Test
-    public void processIncomingVehicle_CAR_Test(){
+    public void processIncomingVehicle_CAR_UpdateParking_AND_SaveTicket_Test(){
         try {
         	// Le type du véhicule => ParkingType.CAR
         	when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -70,7 +70,7 @@ public class ParkingService_2_Test {
     }
     
     @Test
-    public void processIncomingVehicleTest_NotAvailable_Test(){
+    public void processIncomingVehicle_NoAvailabaleParkingSlot_NoUpdate_Test(){
     	// Le type du véhicule => ParkingType.CAR
     	when(inputReaderUtil.readSelection()).thenReturn(1);
     	// Prochaine place de parking non libre
@@ -82,7 +82,7 @@ public class ParkingService_2_Test {
     }
 
     @Test
-    public void processIncomingVehicleTest_WrongType_Test(){
+    public void processIncomingVehicleTest_WrongType_NoUpdate_Test(){
     	// Le type du véhicule => ParkingType.CAR
     	when(inputReaderUtil.readSelection()).thenReturn(3);
     	//

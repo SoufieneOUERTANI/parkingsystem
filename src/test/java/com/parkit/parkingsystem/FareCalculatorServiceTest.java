@@ -30,7 +30,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCar() throws ClassNotFoundException, SQLException{
+    public void calculateFareCarOneHour_FareGeneratedWithCorrespondingFareRate() throws ClassNotFoundException, SQLException{
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -44,7 +44,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBike() throws ClassNotFoundException, SQLException{
+    public void calculateFareBikeOneHour_FareGeneratedWithCorrespondingFareRate() throws ClassNotFoundException, SQLException{
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -58,7 +58,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareUnkownType(){
+    public void calculateFareUnkownType_NullPointerException(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -71,7 +71,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBikeWithFutureInTime(){
+    public void calculateFareBikeWithFutureInTime_IllegalArgumentException(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -84,7 +84,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBikeWithLessThanOneHourParkingTime() throws ClassNotFoundException, SQLException{
+    public void calculateFareBikeWithLessThanOneHourParkingTime_FareGeneratedWithCorrespondingFareRate() throws ClassNotFoundException, SQLException{
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
@@ -98,7 +98,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCarWithLessThanOneHourParkingTime() throws ClassNotFoundException, SQLException{
+    public void calculateFareCar_WithLessThanOneHourParkingTime_FareGeneratedWithCorrespondingFareRate() throws ClassNotFoundException, SQLException{
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
@@ -112,7 +112,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareCarWithMoreThanADayParkingTime() throws ClassNotFoundException, SQLException{
+    public void calculateFareCarWithMoreThanADayParkingTime_FareGeneratedWithCorrespondingFareRate() throws ClassNotFoundException, SQLException{
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
         Date outTime = new Date();
@@ -126,7 +126,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBikeWithLessThanHalHourParkingTime() throws ClassNotFoundException, SQLException{
+    public void calculateFareBikeWithLessThanHalHourParkingTime_FreeFare() throws ClassNotFoundException, SQLException{
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  30 * 60 * 1000) );//30 minutes parking time should give free fare
         Date outTime = new Date();

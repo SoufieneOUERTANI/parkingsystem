@@ -57,7 +57,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingACar() throws ClassNotFoundException, SQLException{
+    public void testParkingACar_TicketIsGenerated_AND_ParkingSlotLocked() throws ClassNotFoundException, SQLException{
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
@@ -74,7 +74,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingLotExit() throws ClassNotFoundException, SQLException{
+    public void testParkingExit_TicketGenerated_AND_ParkingSlotAgainAvailable() throws ClassNotFoundException, SQLException{
         ParkingService parkingService_1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService_1.processIncomingVehicle();
         ParkingService parkingService_2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
