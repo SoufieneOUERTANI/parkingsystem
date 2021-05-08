@@ -26,11 +26,11 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<logger name="com.parkit" level="DEBUG" additivity="false">
-			<AppenderRef ref="console" />
-		</logger>
-		<Root level="trace" additivity="false">
+		<logger name="com.parkit" level="ALL" additivity="TRUE">
 			<AppenderRef ref="rollingFile" />
+		</logger>
+		<Root level="ERROR" additivity="TRUE">
+			<AppenderRef ref="console" />
 		</Root>
 	</Loggers>
 </Configuration>

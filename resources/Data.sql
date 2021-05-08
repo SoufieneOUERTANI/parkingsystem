@@ -1,5 +1,6 @@
-/* Setting up PROD DB */
 drop database prod;
+drop database test;
+/* Setting up PROD DB */
 create database prod;
 use prod;
 
@@ -22,12 +23,15 @@ create table ticket(
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(1,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(2,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'CAR');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'CAR');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(6,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(7,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(8,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(9,true,'BIKE');
 commit;
 
 /* Setting up TEST DB */
-drop database test;
 create database test;
 use test;
 
@@ -50,6 +54,10 @@ create table ticket(
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(1,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(2,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'CAR');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'CAR');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(6,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(7,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(8,true,'BIKE');
+insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(9,true,'BIKE');
 commit;
