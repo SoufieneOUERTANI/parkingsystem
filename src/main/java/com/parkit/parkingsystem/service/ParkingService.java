@@ -9,6 +9,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ParkingService {
@@ -111,8 +112,9 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+                System.out.println("Please pay the parking fare:" + ticket.getPrice()+" for vehicle number:" + ticket.getVehicleRegNumber());
+                System.out.println("Recorded in-time :" + new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(ticket.getInTime().getTime()));
+                System.out.println("Recorded out-time :" + new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(ticket.getOutTime().getTime()));
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
             }

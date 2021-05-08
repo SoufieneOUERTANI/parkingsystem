@@ -86,6 +86,8 @@ public class ParkingDataBase_2_IT {
 
         insertDBTicketField(con, id, parking_number, vehicle_reg_number, price, in_time_min, out_time_min);
         
+        assertEquals(ticketDAO.verifyRecuring("ABCDEF"),true);
+        
         id = 2;
         parking_number = 2; 
         vehicle_reg_number = "ABCDEF"; 
