@@ -13,7 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
-import static com.parkit.parkingsystem.constants.DBConstants.GET_EXITING_TICKET;
+import static com.parkit.parkingsystem.constants.DBConstants.GET_EXITING_CLOSED_TICKET;
+import static com.parkit.parkingsystem.constants.DBConstants.GET_EXITING_OPENED_TICKET;
 
 public class TicketDAO {
 
@@ -94,7 +95,7 @@ public class TicketDAO {
         boolean verifyRecuring = false;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(GET_EXITING_TICKET);
+            PreparedStatement ps = con.prepareStatement(GET_EXITING_CLOSED_TICKET);
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
@@ -109,5 +110,27 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return verifyRecuring;
+    }
+    
+    public boolean verifyExisting(String vehicleRegNumber) {
+        Connection con = null;
+        boolean verifyExisting = false;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(GET_EXITING_OPENED_TICKET);
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            ps.setString(1,vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+            	verifyExisting = true;
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return verifyExisting;
     }
 }

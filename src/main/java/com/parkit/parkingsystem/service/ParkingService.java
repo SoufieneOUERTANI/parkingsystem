@@ -33,6 +33,10 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+                if(ticketDAO.verifyExisting(vehicleRegNumber) == true){
+	                System.out.println("Véhicule déjà rentré");
+	                throw new IllegalArgumentException("Entered input is invalid");
+                }                
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 

@@ -70,7 +70,7 @@ public class ParkingDataBase_2_IT {
      */
     @Test
     
-    public void testRecuringUser5PercentDiscount() throws ClassNotFoundException, SQLException{
+    public void testRecuringUser_5PercentDiscount() throws ClassNotFoundException, SQLException{
         Connection con = null;
         PreparedStatement ps;
 
@@ -113,6 +113,31 @@ public class ParkingDataBase_2_IT {
         			(Math.round(rs.getFloat(3) * 100))/100.0, (Math.round(prix * 100))/100.0);
         }
 
+    }
+    
+    @Test
+    public void testAlreadyExistingVehicleRegNumber_Error() throws ClassNotFoundException, SQLException{
+    	
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+   	
+        ParkingService parkingService_1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService_1.processIncomingVehicle();
+
+        ParkingService parkingService_2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService_2.processIncomingVehicle();
+
+        Connection con = null;
+        PreparedStatement ps;
+
+        con = ticketDAO.dataBaseConfig.getConnection();
+
+        ps = con.prepareStatement("select ID from ticket where VEHICLE_REG_NUMBER = \"ABCDEF\" and OUT_TIME is null");
+        ResultSet rs = ps.executeQuery();
+        int rsCount = 0;
+        while(rs.next()){
+        	rsCount ++;
+        } 
+    	assertEquals(rsCount, 1);
     }
 
 	/**
