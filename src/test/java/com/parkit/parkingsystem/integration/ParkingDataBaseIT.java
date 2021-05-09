@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
@@ -75,12 +75,16 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingExit_TicketGenerated_AND_ParkingSlotAgainAvailable() throws ClassNotFoundException, SQLException{
+
+    	//------------- ACT 
+
         ParkingService parkingService_1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService_1.processIncomingVehicle();
         ParkingService parkingService_2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService_2.processExitingVehicle();
         //TODO: check that the fare generated and out time are populated correctly in the database
         
+    	//------------- ASEERT 
         Connection con = null;
         con = ticketDAO.dataBaseConfig.getConnection();
         PreparedStatement ps = con.prepareStatement("select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE, p.AVAILABLE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=\"ABCDEF\" order by t.IN_TIME  limit 1");
@@ -89,7 +93,7 @@ public class ParkingDataBaseIT {
         	assertNotEquals(rs.getTimestamp(4),null);
         	assertEquals(rs.getInt(7),1);
         	if ((rs.getTimestamp(5).getTime() - rs.getTimestamp(4).getTime()) > 1800000){
-            	assertNotEquals(rs.getTimestamp(3),0);
+            	assertThat(rs.getTimestamp(3)).isNotEqualTo(0);
         	}        
         }
     }

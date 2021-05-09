@@ -40,6 +40,9 @@ public class ParkingService_2_Test {
     @Test
     public void processIncomingVehicle_CAR_UpdateParking_AND_SaveTicket_Test(){
         try {
+        	
+        	//------------- ARRANGE 
+        	
         	// Le type du véhicule => ParkingType.CAR
         	when(inputReaderUtil.readSelection()).thenReturn(1);
         	
@@ -62,8 +65,11 @@ public class ParkingService_2_Test {
             e.printStackTrace();
             throw  new RuntimeException("Failed to set up test mock objects");
         }
-    	//
+
+    	//------------- ACT 
         parkingService.processIncomingVehicle();
+        
+    	//------------- ASSERT 
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
         verify(ticketDAO, Mockito.times(1)).verifyRecuring("ABCDEF");

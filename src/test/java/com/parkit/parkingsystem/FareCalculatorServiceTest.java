@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
@@ -127,15 +128,19 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareBikeWithLessThanHalHourParkingTime_FreeFare() throws ClassNotFoundException, SQLException{
+    	//------------- ARRANGE 
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  30 * 60 * 1000) );//30 minutes parking time should give free fare
         Date outTime = new Date();
+        
+    	//------------- ACT 
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals(0, ticket.getPrice() );
+        
+    	//------------- ASSERT 
+        assertThat(ticket.getPrice()).isEqualTo(0);
     }
 }
